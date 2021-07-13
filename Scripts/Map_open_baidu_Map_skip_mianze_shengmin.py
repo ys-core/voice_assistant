@@ -21,7 +21,7 @@ class testApp(CATBaseCase):
         # device info :
         # functions :
         # model :
-        # updated : 2021-07-12 19:38:58
+        # updated : 2021-07-13 09:30:30
         pass
 
 
@@ -41,11 +41,12 @@ class testApp(CATBaseCase):
     def main(self):                # core steps
 
 
-        global step1,step2,step3,step4
+        global step1,step2,step3,step4,step5
         step1 = False
         step2 = False
         step3 = False
         step4 = False
+        step5 = False
 
         #1.监听用户的输入，并以文本显示在single_content空间内,判断是否识别用户指令正确，正确即跳出while循环,不正确直接报错
         StepDesc(step_desc="1.判断识别结果",expect_value="打开地图")
@@ -67,19 +68,38 @@ class testApp(CATBaseCase):
                     break
 
         AT.sleep(sleepTime="200")
-        #3.手动选择同意，以及 下次不再弹出的提醒框
+
+
+        #3.判断 黑色背景的 免责声明 弹窗是否打开
         StepDesc(step_desc="3.判断灰色背景的 免责声明 弹窗显示状态",expect_value="正常显示")
         while(True):
-            if str(AT.FindElementBy_id(id="com.baidu.naviauto:id/permit_accept",target="None",timeout="2000")) == "True" and str(AT.FindElementBy_id(id="com.baidu.naviauto:id/first_btn",target="None",timeout="2000")) == "True":
+            if str(AT.FindElementBy_id(id="com.baidu.naviauto:id/dialog_title",target="None",timeout="2000")) == "True" and str(AT.FindElementBy_id(id="com.baidu.naviauto:id/dialog_content",target="None",timeout="2000")) == "True" and str(AT.FindElementBy_id(id="com.baidu.naviauto:id/bottom_bar",target="None",timeout="2000")) == "True":
                 # title = AT.GetTextBy_id(id="com.baidu.navigation:id/dialog_title",target="None",timeout="2000")
                 # content = AT.GetTextBy_id(id="com.baidu.che.codriver:id/single_content",target="None",timeout="2000")
                 step3 = True
                 break
+        AT.sleep(sleepTime="200")
+
+        #4.勾选复选框，点击 同意 后进入百度地图
+        StepDesc(step_desc="4.选中复选框,点击同意进入百度地图",expect_value="进入导航主页")
+        while(True):
+            if str(AT.IsCheckedBy_id(id="com.baidu.naviauto:id/permit_accept",target="None",timeout="2000")) == "False" and str(AT.FindElementBy_id(id="com.baidu.naviauto:id/first_btn",target="None",timeout="2000")) == "True":
+                AT.ClickElementBy_id(id="com.baidu.naviauto:id/permit_accept",target="None",timeout="2000")
+                AT.sleep(sleepTime="200")
+                AT.ClickElementBy_id(id="com.baidu.naviauto:id/first_btn",target="None",timeout="2000")
+                step4 = True
+                break
+
+        #5.确认成功进入百度地图首页
+        StepDesc(step_desc="5.确认成功进入百度地图首页",expect_value="成功进入导航主页")
+        while(True):
+            AT.sleep(sleepTime="100")
+            if str(AT.FindElementBy_id(id="com.baidu.naviauto:id/map_control_panel",target="None",timeout="2000")) == "True":
+                step5 = True
+                break
 
 
-
-
-        if(step1 and step2 and step3):
+        if(step1 and step2 and step3 and step4 and step5):
             StepDesc(step_desc="Final result",expect_value="pass")
             AT.sleep(sleepTime="50")
             pass
@@ -90,13 +110,10 @@ class testApp(CATBaseCase):
 
 
 
-
-
-
-
-
     def teardown(self):            # postcondition
-
+        StepDesc(step_desc="Postcondition",expect_value="Return to all apps page")
+        AT.sleep(sleepTime="400")
+        AT.return_to_all_apps_page()
 
         pass
 
