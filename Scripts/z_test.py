@@ -18,7 +18,7 @@ class testApp(CATBaseCase):
         # device info :
         # functions :
         # model :
-        # updated : 2021-07-13 09:03:27
+        # updated : 2021-07-13 15:08:06
         pass
 
     def setup(self):
@@ -26,7 +26,7 @@ class testApp(CATBaseCase):
         pass
 
     def main(self):
-        AT.ClickElementBy_id(id="com.baidu.naviauto:id/permit_accept",target="None",timeout="2000")
+        AT.open_map_input_destination_to_start_navigation()
         pass
 
     def teardown(self):

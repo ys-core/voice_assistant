@@ -10,7 +10,7 @@ from ATScripts import ATAPI as AT
 from ATScripts.ATCommon.apiutil import StepDesc
 
 '''
- Open Baidu Map app
+  it's the first time to open the Map, the "免责声明" toast should be pop-uped before accessing the map homepage
 '''
 class testApp(CATBaseCase):
 
@@ -21,7 +21,7 @@ class testApp(CATBaseCase):
         # device info :
         # functions :
         # model :
-        # updated : 2021-07-12 19:35:41
+        # updated : 2021-07-13 13:47:23
         pass
 
 
@@ -45,6 +45,8 @@ class testApp(CATBaseCase):
         step1 = False
         step2 = False
         step3 = False
+
+        AT.VRSpeak(string="",saveFile="Map_open_map.wav",volume="100",ensure="False")
 
         #1.监听用户的输入，并以文本显示在single_content空间内,判断是否识别用户指令正确，正确即跳出while循环,不正确直接报错
         StepDesc(step_desc="1.判断识别结果",expect_value="打开地图")
