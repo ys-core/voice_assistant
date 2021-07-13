@@ -36,9 +36,9 @@ def demo1(test, desc):
 @apiwrapper
 def wake_up_by_clicking_icon():
     """
-        类型:用户自定义Demo
+        类型:点击方式激活VA
         说明:
-            模版方法
+            点击方式激活VA
         参数:
             test: 模版参数
             desc: 描述方法操作功能，更具体的展示在测试报告
@@ -76,9 +76,9 @@ def wake_up_by_clicking_icon():
 @apiwrapper
 def wake_up_by_voice():
     """
-        类型:用户自定义Demo
+        类型:语音唤醒
         说明:
-            模版方法
+            通过语音唤醒
         参数:
             test: 模版参数
             desc: 描述方法操作功能，更具体的展示在测试报告
@@ -98,7 +98,7 @@ def return_to_all_apps_page():
     """
         类型:用户自定义Demo
         说明:
-            模版方法
+            返回到主界面 all apps page
         参数:
             test: 模版参数
             desc: 描述方法操作功能，更具体的展示在测试报告
@@ -113,28 +113,15 @@ def return_to_all_apps_page():
 @apiwrapper
 def open_map_input_destination_to_start_navigation():
     """
-        类型:用户自定义Demo
+        类型:进入导航状态
         说明:
-            模版方法
+            进入导航状态
         参数:
             test: 模版参数
             desc: 描述方法操作功能，更具体的展示在测试报告
         返回: False
               True
     """
-    def launchMap():
-        AT.return_to_all_apps_page()
-        #不确定 "百度地图" 是在第一屏还是第二屏，所以判断下，并切换到 "百度地图" 在可见视域内，主要是为了接下来获取到地图控件元素并可以打开
-        # AT.Swipe(start_x="1900",start_y="350",end_x="100",end_y="350",duration="100",target="None")
-        if str(AT.FindElementBy_text(text="百度地图",target="None",timeout="2000")) == 'False' and str(AT.FindElementBy_text(text="BaiduMapAuto",target="None",timeout="2000")) == 'False':
-            AT.Swipe(start_x="1900",start_y="350",end_x="100",end_y="350",duration="100",target="None")
-
-        if AT.FindElementBy_text(text="百度地图",target="None",timeout="2000") != "None":
-            AT.ClickElementBy_text(text="百度地图",target="None",timeout="2000")
-        else:
-            AT.ClickElementBy_text(text="BaiduMapAuto",target="None",timeout="2000")
-
-        AT.sleep(sleepTime="6000")
 
     def input_destnation():
         AT.ClickByPoint(x="400",y="70",count="1",target="None")
@@ -156,7 +143,7 @@ def open_map_input_destination_to_start_navigation():
     status = False
     once = True
 
-    launchMap()
+    AT.open_map()
 
 
     while(True):
@@ -173,6 +160,95 @@ def open_map_input_destination_to_start_navigation():
     else:
         return False
 
+
+
+@apiwrapper
+def keep_map_on_path_planned_page():
+    """
+        类型:进入到路径规划页面
+        说明:
+            模版方法
+        参数:
+            test: 模版参数
+            desc: 描述方法操作功能，更具体的展示在测试报告
+        返回: False
+              True
+    """
+
+    def input_destnation():
+        AT.ClickByPoint(x="400",y="70",count="1",target="None")
+        AT.sleep(sleepTime="100")
+        #获取焦点后可以使用Inputtext()方法输入目的地, 比如: 人民广场
+        AT.Inputtext(text="人民广场",target="None")
+        AT.sleep(sleepTime="100")
+        #搜索
+        AT.OnKeyEnter(target="None")
+        AT.sleep(sleepTime="200")
+        #点击   到这去   图标
+        if str(AT.FindElementBy_id(id="com.baidu.naviauto:id/imageView",target="None",timeout="2000")) == 'True':
+            AT.ClickElementBy_id(id="com.baidu.naviauto:id/imageView",target="None",timeout="2000")
+            AT.sleep(sleepTime="2000")
+
+
+
+    global status,once
+    status = False
+    once = True
+
+    AT.open_map()
+
+
+    while(True):
+        if str(AT.FindElementBy_id(id="com.baidu.naviauto:id/bnav_rg_next_deriction_indicator",target="None",timeout="100")) == "True":
+            status = True
+            break
+        if str(AT.FindElementBy_id(id="com.baidu.naviauto:id/et_ctrl_search",target="None",timeout="100")) == "True" and once:
+            once = False
+            input_destnation()
+
+
+    if status:
+        return True
+    else:
+        return False
+
+
+
+@apiwrapper
+def close_map():
+    """
+        类型:关闭地图
+        说明:
+            close map
+        参数:
+            test: 模版参数
+            desc: 描述方法操作功能，更具体的展示在测试报告
+        返回: False
+              True
+    """
+    r_v = AT.RunCommand(command="adb shell am force-stop com.baidu.naviauto",timeout="")
+    AT.sleep(sleepTime="200")
+    if len(r_v) == 7:
+        return True
+    else:
+        return False
+
+@apiwrapper
+def open_map():
+    """
+        类型:打开地图
+        说明:
+            open map
+        参数:
+            test: 模版参数
+            desc: 描述方法操作功能，更具体的展示在测试报告
+        返回: False
+              True
+    """
+    AT.RunCommand(command="adb shell am start -n com.baidu.naviauto/.NaviAutoActivity",timeout="")
+    AT.sleep(sleepTime="12000")
+
+    return True
 
 
 
