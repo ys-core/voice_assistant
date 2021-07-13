@@ -18,7 +18,7 @@ class testApp(CATBaseCase):
         # device info :
         # functions :
         # model :
-        # updated : 2021-07-13 15:08:06
+        # updated : 2021-07-13 16:38:56
         pass
 
     def setup(self):
@@ -26,7 +26,8 @@ class testApp(CATBaseCase):
         pass
 
     def main(self):
-        AT.open_map_input_destination_to_start_navigation()
+        # AT.open_map_input_destination_to_start_navigation()
+        AT.close_map()
         pass
 
     def teardown(self):
