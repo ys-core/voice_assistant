@@ -21,7 +21,7 @@ class testApp(CATBaseCase):
         # device info :
         # functions :
         # model :
-        # updated : 2021-07-13 17:00:59
+        # updated : 2021-07-13 17:54:46
         pass
 
 
@@ -29,14 +29,14 @@ class testApp(CATBaseCase):
     def setup(self):                # precondtion
 
         global user_command,TTS_feedback
-        user_command = "打开地图"
-        TTS_feedback = "地图已打开"
+        user_command = "开始导航"
+        TTS_feedback = "准备出发，全程**公里，预计需要**分钟"
 
-        AT.close_map()
-
-        AT.open_map()
-
-        AT.wake_up_by_clicking_icon()
+        StepDesc(step_desc="确认当前为导航过程中",expect_value="打开导航中")
+        if AT.open_map_input_destination_to_start_navigation():
+            AT.wake_up_by_clicking_icon()
+        else:
+            AT.open_map_input_destination_to_start_navigation()
 
         pass
 
@@ -49,12 +49,10 @@ class testApp(CATBaseCase):
         step1 = False
         step2 = False
 
-
-
-        AT.VRSpeak(string="",saveFile="Map_open_map.wav",volume="100",ensure="False")
+        AT.VRSpeak(string="",saveFile="Map_start_navi.wav",volume="100",ensure="False")
 
         #1.监听用户的输入，并以文本显示在single_content空间内,判断是否识别用户指令正确，正确即跳出while循环,不正确直接报错
-        StepDesc(step_desc="1.判断识别结果",expect_value="打开地图")
+        StepDesc(step_desc="1.判断识别结果",expect_value="开始导航")
         while(True):
             if str(AT.FindElementBy_id(id="com.baidu.che.codriver:id/single_content",target="None",timeout="1")) == "True":
                 temp = AT.GetTextBy_id(id="com.baidu.che.codriver:id/single_content",target="None",timeout="1")
@@ -64,7 +62,7 @@ class testApp(CATBaseCase):
 
 
         #2.监听TTS播报的文本，判断是否相应正确，若正确即跳出while循环,不正确直接报错
-        StepDesc(step_desc="2.判断TTS播报内容",expect_value="地图已打开")
+        StepDesc(step_desc="2.判断TTS播报内容",expect_value="当前已在导航中")
         while(True):
             if str(AT.FindElementBy_id(id="com.baidu.che.codriver:id/single_content",target="None",timeout="1")) == "True":
                 temp = AT.GetTextBy_id(id="com.baidu.che.codriver:id/single_content",target="None",timeout="1")
