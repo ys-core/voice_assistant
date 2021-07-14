@@ -21,7 +21,7 @@ class testApp(CATBaseCase):
         # device info :
         # functions :
         # model :
-        # updated : 2021-07-13 14:00:54
+        # updated : 2021-07-14 12:20:19
         pass
 
 
@@ -51,7 +51,7 @@ class testApp(CATBaseCase):
 
 
 
-        AT.VRSpeak(string="",saveFile="Map_open_map.wav",volume="100",ensure="False")
+        AT.VRSpeak(string="",saveFile="Sources\\Medias\\Map\\Map_open_map.wav",volume="100",ensure="False")
 
         #1.监听用户的输入，并以文本显示在single_content空间内,判断是否识别用户指令正确，正确即跳出while循环,不正确直接报错
         StepDesc(step_desc="1.判断识别结果",expect_value="打开地图")

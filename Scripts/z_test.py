@@ -18,7 +18,7 @@ class testApp(CATBaseCase):
         # device info :
         # functions :
         # model :
-        # updated : 2021-07-13 16:38:56
+        # updated : 2021-07-14 13:13:40
         pass
 
     def setup(self):
@@ -27,7 +27,10 @@ class testApp(CATBaseCase):
 
     def main(self):
         # AT.open_map_input_destination_to_start_navigation()
-        AT.close_map()
+        # AT.close_map()
+        # AT.ClickElementBy_id(id="com.baidu.naviauto:id/second_btn",target="None",timeout="2000")
+        AT.open_map()
+
         pass
 
     def teardown(self):

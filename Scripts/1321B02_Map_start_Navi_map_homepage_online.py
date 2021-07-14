@@ -8,7 +8,9 @@
 from ATScripts.ATSrc.ATImpl.ATAcutor.BaseTestCase import CATBaseCase
 from ATScripts import ATAPI as AT
 from ATScripts.ATCommon.apiutil import StepDesc
-
+'''
+  precondition: 地图打开处于地图首页
+'''
 class testApp(CATBaseCase):
 
     def info(self):
@@ -18,7 +20,7 @@ class testApp(CATBaseCase):
         # device info :
         # functions :
         # model :
-        # updated : 2021-07-13 17:34:47
+        # updated : 2021-07-14 12:26:27
         pass
 
     def setup(self):
@@ -40,7 +42,7 @@ class testApp(CATBaseCase):
         step2 = False
 
 
-        AT.VRSpeak(string="",saveFile="Map_start_navi.wav",volume="100",ensure="False")
+        AT.VRSpeak(string="",saveFile="Sources\\Medias\\Map\\Map_start_navi.wav",volume="100",ensure="False")
 
         #1.监听用户的输入，并以文本显示在single_content空间内,判断是否识别用户指令正确，正确即跳出while循环,不正确直接报错
         StepDesc(step_desc="1.判断识别结果",expect_value="开始导航")

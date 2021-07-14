@@ -10,7 +10,7 @@ from ATScripts import ATAPI as AT
 from ATScripts.ATCommon.apiutil import StepDesc
 
 '''
-  it's the first time to open the Map, the "免责声明" toast should be pop-uped before accessing the map homepage
+  precondition: 地图关闭，后台杀死中，VA：地图放到最小，TTS，请先打开地图
 '''
 class testApp(CATBaseCase):
 
@@ -21,7 +21,7 @@ class testApp(CATBaseCase):
         # device info :
         # functions :
         # model :
-        # updated : 2021-07-14 12:18:19
+        # updated : 2021-07-14 15:58:17
         pass
 
 
@@ -29,10 +29,14 @@ class testApp(CATBaseCase):
     def setup(self):                # precondtion
 
         global user_command,TTS_feedback
-        user_command = "打开地图"
-        TTS_feedback = "请先同意免责声明"
-        AT.wake_up_by_clicking_icon()
-        # AT.wake_up_by_voice()
+        user_command = "结束导航"
+        TTS_feedback = "导航结束"
+
+        StepDesc(step_desc="确认当前为导航过程中",expect_value="打开导航中")
+        if AT.open_map_input_destination_to_start_navigation():
+            AT.wake_up_by_clicking_icon()
+        else:
+            AT.open_map_input_destination_to_start_navigation()
 
         pass
 
@@ -41,15 +45,14 @@ class testApp(CATBaseCase):
     def main(self):                # core steps
 
 
-        global step1,step2,step3
+        global step1,step2
         step1 = False
         step2 = False
-        step3 = False
 
-        AT.VRSpeak(string="",saveFile="Sources\\Medias\\Map\\Map_open_map.wav",volume="100",ensure="False")
+        AT.VRSpeak(string="",saveFile="Map_end_navi.wav",volume="100",ensure="False")
 
         #1.监听用户的输入，并以文本显示在single_content空间内,判断是否识别用户指令正确，正确即跳出while循环,不正确直接报错
-        StepDesc(step_desc="1.判断识别结果",expect_value="打开地图")
+        StepDesc(step_desc="1.判断识别结果",expect_value="开始导航")
         while(True):
             if str(AT.FindElementBy_id(id="com.baidu.che.codriver:id/single_content",target="None",timeout="1")) == "True":
                 temp = AT.GetTextBy_id(id="com.baidu.che.codriver:id/single_content",target="None",timeout="1")
@@ -59,7 +62,7 @@ class testApp(CATBaseCase):
 
 
         #2.监听TTS播报的文本，判断是否相应正确，若正确即跳出while循环,不正确直接报错
-        StepDesc(step_desc="2.判断TTS播报内容",expect_value="请先同意免责申明")
+        StepDesc(step_desc="2.判断TTS播报内容",expect_value="当前已在导航中")
         while(True):
             if str(AT.FindElementBy_id(id="com.baidu.che.codriver:id/single_content",target="None",timeout="1")) == "True":
                 temp = AT.GetTextBy_id(id="com.baidu.che.codriver:id/single_content",target="None",timeout="1")
@@ -67,17 +70,10 @@ class testApp(CATBaseCase):
                     step2 = True
                     break
 
-        #3.判断 黑色背景的 免责声明 弹窗是否打开
-        StepDesc(step_desc="3.判断灰色背景的 免责声明 弹窗显示状态",expect_value="正常显示")
-        while(True):
-            if str(AT.FindElementBy_id(id="com.baidu.naviauto:id/dialog_title",target="None",timeout="2000")) == "True" and str(AT.FindElementBy_id(id="com.baidu.naviauto:id/dialog_content",target="None",timeout="2000")) == "True" and str(AT.FindElementBy_id(id="com.baidu.naviauto:id/bottom_bar",target="None",timeout="2000")) == "True":
-                # title = AT.GetTextBy_id(id="com.baidu.navigation:id/dialog_title",target="None",timeout="2000")
-                # content = AT.GetTextBy_id(id="com.baidu.che.codriver:id/single_content",target="None",timeout="2000")
-                step3 = True
-                break
+        AT.sleep(sleepTime="200")
 
 
-        if(step1 and step2 and step3):
+        if(step1 and step2):
             StepDesc(step_desc="Final result",expect_value="pass")
             AT.sleep(sleepTime="50")
             pass
@@ -88,11 +84,11 @@ class testApp(CATBaseCase):
 
 
 
-
     def teardown(self):            # postcondition
         StepDesc(step_desc="Postcondition",expect_value="Return to all apps page")
-        AT.sleep(sleepTime="400")
-        AT.return_to_all_apps_page()
+        # AT.return_to_all_apps_page()
+        AT.sleep(sleepTime="200")
+
         pass
 
 

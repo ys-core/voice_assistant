@@ -13,25 +13,6 @@ from ATScripts.ATCommon.apiutil import StepDesc
 
 # 自定义API类
 # 方法类注册器，用于将方法注册到系统当中(如果没有装饰器，则API执行信息将不会再IDE上显示，切记！)
-@apiwrapper
-def demo1(test, desc):
-    """
-    类型:用户自定义Demo
-    说明:
-        模版方法
-    参数:
-        test: 模版参数
-        desc: 描述方法操作功能，更具体的展示在测试报告
-    返回: False, 描述： 失败
-          True, 描述： 成功
-          描述： 成功，并返回描述内容
-    """
-    # 调用系统内置sleep方法
-    AT.sleep(sleepTime=10)
-    # 返回执行结果成功，并返回描述信息
-    return True, "Sleep 10 seconds success"
-    # 返回执行结果失败，并返回描述信息
-    # return False, "Sleep 10 seconds failed"
 
 @apiwrapper
 def wake_up_by_clicking_icon():
@@ -187,7 +168,7 @@ def keep_map_on_path_planned_page():
         #点击   到这去   图标
         if str(AT.FindElementBy_id(id="com.baidu.naviauto:id/imageView",target="None",timeout="2000")) == 'True':
             AT.ClickElementBy_id(id="com.baidu.naviauto:id/imageView",target="None",timeout="2000")
-            AT.sleep(sleepTime="2000")
+            AT.sleep(sleepTime="100")
 
 
 
@@ -199,7 +180,8 @@ def keep_map_on_path_planned_page():
 
 
     while(True):
-        if str(AT.FindElementBy_id(id="com.baidu.naviauto:id/bnav_rg_next_deriction_indicator",target="None",timeout="100")) == "True":
+        # id: textStartNav   ,倒计时10sx,9s,8s,.....
+        if str(AT.FindElementBy_id(id="com.baidu.naviauto:id/textStartNav",target="None",timeout="100")) == "True":
             status = True
             break
         if str(AT.FindElementBy_id(id="com.baidu.naviauto:id/et_ctrl_search",target="None",timeout="100")) == "True" and once:
@@ -226,7 +208,7 @@ def close_map():
         返回: False
               True
     """
-    r_v = AT.RunCommand(command="adb shell am force-stop com.baidu.naviauto",timeout="")
+    r_v = AT.RunCommand(command="adb shell am force-stop com.baidu.naviauto",timeout="100")
     AT.sleep(sleepTime="200")
     if len(r_v) == 7:
         return True
@@ -245,10 +227,20 @@ def open_map():
         返回: False
               True
     """
-    AT.RunCommand(command="adb shell am start -n com.baidu.naviauto/.NaviAutoActivity",timeout="")
-    AT.sleep(sleepTime="12000")
+    AT.close_map()
+    AT.sleep(sleepTime="100")
+    AT.RunCommand(command="adb shell am start -n com.baidu.naviauto/.NaviAutoActivity",timeout="100")
+    AT.sleep(sleepTime="15000")
 
-    return True
+    if str(AT.FindElementBy_id(id="com.baidu.che.codriver:id/content_msg",target="None",timeout="1")) == "True":
+        AT.ClickElementBy_id(id="com.baidu.naviauto:id/second_btn",target="None",timeout="2000")
+        AT.sleep(sleepTime="2000")
+
+    # 如果没有找到“请输入目的地”这个输入框，视为打开百度地图失败，返回False,否则返回True
+    if str(AT.FindElementBy_id(id="com.baidu.che.codriver:id/et_ctrl_search",target="None",timeout="1")) == "True":
+        return True
+    else:
+        return False
 
 
 
