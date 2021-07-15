@@ -18,7 +18,7 @@ class testApp(CATBaseCase):
         # device info :
         # functions :
         # model :
-        # updated : 2021-07-09 08:16:37
+        # updated : 2019-11-4 16:03:09
         pass
 
     def setup(self):
@@ -33,12 +33,10 @@ class testApp(CATBaseCase):
         AT.sleep(sleepTime="400")
         StepDesc(step_desc="Step description2",expect_value="Expect value2")
         AT.sleep(sleepTime="400")
-        AT.wakeup()
         StepDesc(step_desc="Step description3",expect_value="Expect value3")
         AT.sleep(sleepTime="400")
         StepDesc(step_desc="Step description4",expect_value="Expect value4")
         AT.sleep(sleepTime="400")
-
         pass
 
     def teardown(self):
@@ -46,7 +44,6 @@ class testApp(CATBaseCase):
         AT.sleep(sleepTime="400")
         StepDesc(step_desc="Step description2",expect_value="Expect value2")
         AT.sleep(sleepTime="400")
-
         pass
 
 
