@@ -8,6 +8,8 @@
 from ATScripts.ATSrc.ATImpl.ATAcutor.BaseTestCase import CATBaseCase
 from ATScripts import ATAPI as AT
 from ATScripts.ATCommon.apiutil import StepDesc
+import time
+
 '''
   precondition: 地图打开处于地图首页
 '''
@@ -20,15 +22,17 @@ class testApp(CATBaseCase):
         # device info :
         # functions :
         # model :
-        # updated : 2021-07-14 12:26:27
+        # updated : 2021-07-15 17:09:02
         pass
 
     def setup(self):
 
-        global user_command,TTS_feedback
+        global user_command,TTS_feedback,startTime
+        startTime = time.time()
         user_command = "开始导航"
         TTS_feedback = "请先发起导航"
 
+        StepDesc(step_desc="确认在地图首页",expect_value="处于地图首页")
         AT.close_map()
         AT.open_map()
 
@@ -52,7 +56,9 @@ class testApp(CATBaseCase):
                 if temp == user_command:
                     step1 = True
                     break
-
+            if (time.time() - startTime) > AT.get_max_time_tolerance():
+                step1 = False
+                break
 
         #2.监听TTS播报的文本，判断是否相应正确，若正确即跳出while循环,不正确直接报错
         StepDesc(step_desc="2.判断TTS播报内容",expect_value="请先发起导航")
@@ -62,6 +68,9 @@ class testApp(CATBaseCase):
                 if TTS_feedback in temp and "当前网络异常" not in temp:
                     step2 = True
                     break
+            if (time.time() - startTime) > AT.get_max_time_tolerance():
+                step2 = False
+                break
 
         AT.sleep(sleepTime="200")
 
@@ -73,7 +82,8 @@ class testApp(CATBaseCase):
         else:
             StepDesc(step_desc="Final result",expect_value="fail")
             AT.sleep(sleepTime="50")
-            AT.ReportError(string="failed finally")
+            # AT.ReportError(string="failed finally")
+            AT.MakeFail(text="This case failed")
 
         pass
 

@@ -14,6 +14,25 @@ from ATScripts.ATCommon.apiutil import StepDesc
 # 自定义API类
 # 方法类注册器，用于将方法注册到系统当中(如果没有装饰器，则API执行信息将不会再IDE上显示，切记！)
 
+
+
+def get_max_time_tolerance():
+    """
+        类型:获得最大容忍时长
+        说明:
+            force stop the current case
+        参数:
+            test: 模版参数
+            desc: 描述方法操作功能，更具体的展示在测试报告
+        返回: False
+              True
+    """
+    #设置每条case的最大执行时间，超出该时间则视为Hold住了,陷入了死循环,所以报错结束执行当前case,继续执行后续case
+    max_time_tolerance = 120
+    return max_time_tolerance
+
+
+
 @apiwrapper
 def wake_up_by_clicking_icon():
     """
@@ -91,7 +110,7 @@ def return_to_all_apps_page():
 
     return True
 
-@apiwrapper
+
 def open_map_input_destination_to_start_navigation():
     """
         类型:进入导航状态
@@ -196,7 +215,7 @@ def keep_map_on_path_planned_page():
 
 
 
-@apiwrapper
+
 def close_map():
     """
         类型:关闭地图
@@ -215,7 +234,7 @@ def close_map():
     else:
         return False
 
-@apiwrapper
+
 def open_map():
     """
         类型:打开地图

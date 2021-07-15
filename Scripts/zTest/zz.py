@@ -8,6 +8,7 @@
 from ATScripts.ATSrc.ATImpl.ATAcutor.BaseTestCase import CATBaseCase
 from ATScripts import ATAPI as AT
 from ATScripts.ATCommon.apiutil import StepDesc
+import time
 
 class testApp(CATBaseCase):
 
@@ -18,14 +19,22 @@ class testApp(CATBaseCase):
         # device info :
         # functions :
         # model :
-        # updated : 2021-07-14 16:48:48
+        # updated : 2021-07-15 14:02:33
+        # updated : 2021-07-15 15:35:37
         pass
 
     def setup(self):
+        global startTime
+        startTime = time.time()
+
         StepDesc(step_desc="Step description1",expect_value="Expect value1")
         AT.sleep(sleepTime="400")
         StepDesc(step_desc="Step description2",expect_value="Expect value2")
         AT.sleep(sleepTime="400")
+        StepDesc(step_desc="Step description3",expect_value="Expect value3")
+        AT.sleep(sleepTime="400")
+
+
         pass
 
     def main(self):
@@ -36,9 +45,23 @@ class testApp(CATBaseCase):
         StepDesc(step_desc="Step description3",expect_value="Expect value3")
         AT.sleep(sleepTime="400")
         StepDesc(step_desc="Step description4",expect_value="Expect value4")
-        AT.ReportError(string="111111111111111111111111111111111111")
         AT.sleep(sleepTime="400")
-        AT.MakeFail(text="produce a fail api")
+        result = AT.get_max_time_tolerance()
+        AT.ReportInfo(string=result)
+        if (time.time() - startTime) > result:
+            AT.MakeFail(text="produce a fail api")
+
+
+        StepDesc(step_desc="Step description1",expect_value="Expect value1")
+        AT.sleep(sleepTime="400")
+        StepDesc(step_desc="Step description2",expect_value="Expect value2")
+        AT.sleep(sleepTime="400")
+        StepDesc(step_desc="Step description3",expect_value="Expect value3")
+        AT.sleep(sleepTime="400")
+        StepDesc(step_desc="Step description4",expect_value="Expect value4")
+        AT.sleep(sleepTime="400")
+
+
         pass
 
     def teardown(self):

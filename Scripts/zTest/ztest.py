@@ -18,7 +18,7 @@ class testApp(CATBaseCase):
         # device info :
         # functions :
         # model :
-        # updated : 2019-11-4 16:03:09
+        # updated : 2021-07-15 15:30:40
         pass
 
     def setup(self):
@@ -37,6 +37,8 @@ class testApp(CATBaseCase):
         AT.sleep(sleepTime="400")
         StepDesc(step_desc="Step description4",expect_value="Expect value4")
         AT.sleep(sleepTime="400")
+        result = AT.get_max_time_tolerance()
+        AT.ReportInfo(string=str(result))
         pass
 
     def teardown(self):

@@ -8,6 +8,7 @@
 from ATScripts.ATSrc.ATImpl.ATAcutor.BaseTestCase import CATBaseCase
 from ATScripts import ATAPI as AT
 from ATScripts.ATCommon.apiutil import StepDesc
+import time
 
 '''
   precondition:当前已是白天模式，VA：白天模式，TTS，当前已是白天模式
@@ -21,7 +22,7 @@ class testApp(CATBaseCase):
         # device info :
         # functions :
         # model :
-        # updated : 2021-07-14 14:05:44
+        # updated : 2021-07-15 16:45:21
         pass
 
 

@@ -8,9 +8,10 @@
 from ATScripts.ATSrc.ATImpl.ATAcutor.BaseTestCase import CATBaseCase
 from ATScripts import ATAPI as AT
 from ATScripts.ATCommon.apiutil import StepDesc
+import time
 
 '''
-  precondition: 正在导航中...
+  precondition: 不在导航中...，即为非导航状态
 '''
 class testApp(CATBaseCase):
 
@@ -21,21 +22,20 @@ class testApp(CATBaseCase):
         # device info :
         # functions :
         # model :
-        # updated : 2021-07-13 18:11:42
+        # updated : 2021-07-15 17:27:29
         pass
 
 
 
     def setup(self):                # precondtion
 
-        global user_command,TTS_feedback
+        global user_command,TTS_feedback,startTime
+        startTime = time.time()
         user_command = "结束导航"
         TTS_feedback = "当前不在导航状态"
 
-        AT.close_map()
-
+        StepDesc(step_desc="确认当前不处于导航过程中",expect_value="不处于导航中")
         AT.open_map()
-
         AT.wake_up_by_clicking_icon()
 
         pass
@@ -49,26 +49,31 @@ class testApp(CATBaseCase):
         step1 = False
         step2 = False
 
-        AT.VRSpeak(string="",saveFile="Map_end_navi.wav",volume="100",ensure="False")
+        AT.VRSpeak(string="",saveFile="Sources\\Medias\\Map\\Map_end_navi.wav",volume="100",ensure="False")
 
         #1.监听用户的输入，并以文本显示在single_content空间内,判断是否识别用户指令正确，正确即跳出while循环,不正确直接报错
-        StepDesc(step_desc="1.判断识别结果",expect_value="开始导航")
+        StepDesc(step_desc="1.判断识别结果",expect_value="结束导航")
         while(True):
             if str(AT.FindElementBy_id(id="com.baidu.che.codriver:id/single_content",target="None",timeout="1")) == "True":
                 temp = AT.GetTextBy_id(id="com.baidu.che.codriver:id/single_content",target="None",timeout="1")
                 if temp == user_command:
                     step1 = True
                     break
-
+            if (time.time() - startTime) > AT.get_max_time_tolerance():
+                step1 = False
+                break
 
         #2.监听TTS播报的文本，判断是否相应正确，若正确即跳出while循环,不正确直接报错
-        StepDesc(step_desc="2.判断TTS播报内容",expect_value="当前已在导航中")
+        StepDesc(step_desc="2.判断TTS播报内容",expect_value="当前不在导航状态")
         while(True):
             if str(AT.FindElementBy_id(id="com.baidu.che.codriver:id/single_content",target="None",timeout="1")) == "True":
                 temp = AT.GetTextBy_id(id="com.baidu.che.codriver:id/single_content",target="None",timeout="1")
                 if TTS_feedback in temp and "当前网络异常" not in temp:
                     step2 = True
                     break
+            if (time.time() - startTime) > AT.get_max_time_tolerance():
+                step2 = False
+                break
 
         AT.sleep(sleepTime="200")
 

@@ -8,6 +8,7 @@
 from ATScripts.ATSrc.ATImpl.ATAcutor.BaseTestCase import CATBaseCase
 from ATScripts import ATAPI as AT
 from ATScripts.ATCommon.apiutil import StepDesc
+import time
 
 '''
    直接接入到地图首页，因为之前的脚本中已经勾选了 免责声明，以后的脚本执行都不再会有 免责声明 弹窗
@@ -21,16 +22,20 @@ class testApp(CATBaseCase):
         # device info :
         # functions :
         # model :
-        # updated : 2021-07-14 12:20:03
+        # updated : 2021-07-15 17:23:55
         pass
 
 
 
     def setup(self):                # precondtion
 
-        global user_command,TTS_feedback
+        global user_command,TTS_feedback,startTime
+        startTime = time.time()
         user_command = "打开地图"
         TTS_feedback = "为你打开地图"
+
+        StepDesc(step_desc="处于系统all app页面且地图未打开",expect_value="地图未打开且处于all app页面")
+        AT.close_map()
         AT.wake_up_by_clicking_icon()
         # AT.wake_up_by_voice()
 
@@ -56,7 +61,9 @@ class testApp(CATBaseCase):
                 if temp == user_command:
                     step1 = True
                     break
-
+            if (time.time() - startTime) > AT.get_max_time_tolerance():
+                step1 = False
+                break
 
         #2.监听TTS播报的文本，判断是否相应正确，若正确即跳出while循环,不正确直接报错
         StepDesc(step_desc="2.判断TTS播报内容",expect_value="请先同意免责申明")
@@ -66,6 +73,9 @@ class testApp(CATBaseCase):
                 if TTS_feedback in temp and "当前网络异常" not in temp:
                     step2 = True
                     break
+            if (time.time() - startTime) > AT.get_max_time_tolerance():
+                step2 = False
+                break
 
         AT.sleep(sleepTime="200")
 
@@ -77,7 +87,9 @@ class testApp(CATBaseCase):
             if str(AT.FindElementBy_id(id="com.baidu.naviauto:id/map_control_panel",target="None",timeout="2000")) == "True":
                 step3 = True
                 break
-
+            if (time.time() - startTime) > AT.get_max_time_tolerance():
+                step3 = False
+                break
 
         if(step1 and step2 and step3):
             StepDesc(step_desc="Final result",expect_value="pass")
@@ -86,7 +98,8 @@ class testApp(CATBaseCase):
         else:
             StepDesc(step_desc="Final result",expect_value="fail")
             AT.sleep(sleepTime="50")
-            AT.ReportError(string="failed finally")
+            # AT.ReportError(string="failed finally")
+            AT.MakeFail(text="This case failed")
 
 
 
