@@ -8,6 +8,7 @@
 from ATScripts.ATSrc.ATImpl.ATAcutor.BaseTestCase import CATBaseCase
 from ATScripts import ATAPI as AT
 from ATScripts.ATCommon.apiutil import StepDesc
+import time
 
 '''
   precondition: 当前地图不处于放到最大比例的状态，VA：地图放到最大，TTS，已放大地图到最大
@@ -21,14 +22,15 @@ class testApp(CATBaseCase):
         # device info :
         # functions :
         # model :
-        # updated : 2021-07-16 18:13:13
+        # updated : 2021-07-16 19:34:43
         pass
 
 
 
     def setup(self):                # precondtion
 
-        global user_command,TTS_feedback
+        global user_command,TTS_feedback,startTime
+        startTime = time.time()
         user_command = "结束导航"
         TTS_feedback = "导航结束"
 
@@ -59,7 +61,9 @@ class testApp(CATBaseCase):
                 if temp == user_command:
                     step1 = True
                     break
-
+            if (time.time() - startTime) > AT.get_max_time_tolerance():
+                step1 = False
+                break
 
         #2.监听TTS播报的文本，判断是否相应正确，若正确即跳出while循环,不正确直接报错
         StepDesc(step_desc="2.判断TTS播报内容",expect_value="当前已在导航中")
@@ -69,6 +73,9 @@ class testApp(CATBaseCase):
                 if TTS_feedback in temp and "当前网络异常" not in temp:
                     step2 = True
                     break
+            if (time.time() - startTime) > AT.get_max_time_tolerance():
+                step2 = False
+                break
 
         AT.sleep(sleepTime="200")
 
