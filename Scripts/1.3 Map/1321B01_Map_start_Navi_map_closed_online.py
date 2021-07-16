@@ -22,7 +22,7 @@ class testApp(CATBaseCase):
         # device info :
         # functions :
         # model :
-        # updated : 2021-07-15 17:10:18
+        # updated : 2021-07-16 08:37:20
         pass
 
     def setup(self):
@@ -33,7 +33,7 @@ class testApp(CATBaseCase):
         TTS_feedback = "请先打开地图"
 
         StepDesc(step_desc="确认地图处于关闭状态",expect_value="地图处于关闭状态")
-        AT.close_map()
+        AT.closeMap()
         AT.wake_up_by_clicking_icon()
 
         pass

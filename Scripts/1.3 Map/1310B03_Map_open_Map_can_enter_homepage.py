@@ -22,7 +22,7 @@ class testApp(CATBaseCase):
         # device info :
         # functions :
         # model :
-        # updated : 2021-07-15 17:23:55
+        # updated : 2021-07-16 08:36:37
         pass
 
 
@@ -35,7 +35,7 @@ class testApp(CATBaseCase):
         TTS_feedback = "为你打开地图"
 
         StepDesc(step_desc="处于系统all app页面且地图未打开",expect_value="地图未打开且处于all app页面")
-        AT.close_map()
+        AT.closeMap()
         AT.wake_up_by_clicking_icon()
         # AT.wake_up_by_voice()
 

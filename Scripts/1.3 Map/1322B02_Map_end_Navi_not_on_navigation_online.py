@@ -22,7 +22,7 @@ class testApp(CATBaseCase):
         # device info :
         # functions :
         # model :
-        # updated : 2021-07-15 17:27:29
+        # updated : 2021-07-16 08:39:02
         pass
 
 
@@ -35,7 +35,7 @@ class testApp(CATBaseCase):
         TTS_feedback = "当前不在导航状态"
 
         StepDesc(step_desc="确认当前不处于导航过程中",expect_value="不处于导航中")
-        AT.open_map()
+        AT.openMap()
         AT.wake_up_by_clicking_icon()
 
         pass

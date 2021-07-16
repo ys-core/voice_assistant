@@ -22,7 +22,7 @@ class testApp(CATBaseCase):
         # device info :
         # functions :
         # model :
-        # updated : 2021-07-15 17:09:02
+        # updated : 2021-07-16 08:37:54
         pass
 
     def setup(self):
@@ -33,8 +33,8 @@ class testApp(CATBaseCase):
         TTS_feedback = "请先发起导航"
 
         StepDesc(step_desc="确认在地图首页",expect_value="处于地图首页")
-        AT.close_map()
-        AT.open_map()
+        AT.closeMap()
+        AT.openMap()
 
         AT.wake_up_by_clicking_icon()
 
