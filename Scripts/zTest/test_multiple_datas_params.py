@@ -18,7 +18,7 @@ class testApp(CATBaseCase):
         # device info :
         # functions :
         # model :
-        # updated : 2021-07-16 13:25:05
+        # updated : 2019-11-4 16:03:09
         pass
 
     def setup(self):
@@ -29,16 +29,14 @@ class testApp(CATBaseCase):
         pass
 
     def main(self):
-        AT.CanBusLoadDbcFile("D:\\core\\458.dbc")
-        AT.CanBusLoadMACT(r'D:\\core\\PATAC_MACT_VCU_V23.36.0.csv')
-
-        AT.CanBusStopSendMsg(id="0x111", ch=1)
-        AT.CanBusStopSendMsg(id="0x638", ch=1)
-        AT.CanBusStopSendMsg(id="0x42E", ch=1)
-        AT.CanBusStopSendMsg(id="0x539", ch=1)
-        AT.CanBusStopSendMsg(id="0x53A", ch=1)
-
-        # AT.CanBusStopSendMsg(id="0x376", ch=1)
+        StepDesc(step_desc="Step description1",expect_value="Expect value1")
+        AT.sleep(sleepTime="400")
+        StepDesc(step_desc="Step description2",expect_value="Expect value2")
+        AT.sleep(sleepTime="400")
+        StepDesc(step_desc="Step description3",expect_value="Expect value3")
+        AT.sleep(sleepTime="400")
+        StepDesc(step_desc="Step description4",expect_value="Expect value4")
+        AT.sleep(sleepTime="400")
         pass
 
     def teardown(self):

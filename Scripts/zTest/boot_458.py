@@ -18,38 +18,33 @@ class testApp(CATBaseCase):
         # device info :
         # functions :
         # model :
-        # updated : 2021-07-16 15:59:18
+        # updated : 2021-07-16 16:07:10
         pass
 
     def setup(self):
-        StepDesc(step_desc="Step description1",expect_value="Expect value1")
-        AT.sleep(sleepTime="400")
-        StepDesc(step_desc="Step description2",expect_value="Expect value2")
-        AT.sleep(sleepTime="400")
+
         pass
 
     def main(self):
-        StepDesc(step_desc="",expect_value="")
+        StepDesc(step_desc="wakeup...",expect_value="")
         AT.sleep(sleepTime="400")
         AT.CanBusLoadDbcFile("D:\\core\\458.dbc")
         AT.CanBusLoadMACT(r'D:\\core\\PATAC_MACT_VCU_V23.36.0.csv')
-        AT.CanBusSendMultipleMsg(ids='["0x638", "0x111","0x42E","0x539","0x53A"]',
-                                 is_mac='{"0x638": "False","0x42E": "False", "0x539": "False", "0x53A": "False",  "0x111": "True"}',
+        AT.CanBusSendMultipleMsg(ids='["0x638", "0x111"]',
+                                 is_mac='{"0x638": "False", "0x111": "True"}',
                                  signals='{"0x111": {"IPPEIPltGenStMAC": "88524310","IPPEIPltGenStAntiRplyCnt": "6","ISysPwrMdARC": ["0", "1", "2", "3"],"IRmVehStrRqARC": "0","ISysPwrMd": "2","IPrkBrkSwAtv": "1"}}',
-                                 datas='{"0x638": "4840400000000000","0x42E": "3100","0x539": "3131313131313131","0x53A": "3131313131313131"}',
+                                 datas='{"0x638": "4840400000000000"}',
                                  cycle_times='{"0x638": "1"}', channel='1')
 
 
+        AT.CANBusSend(id="0x42E",dlc="2",message="3100",baudrate="500",channel="1",interval="0",duration="1000")
+        AT.CANBusSend(id="0x539",dlc="8",message="3131313131313131",baudrate="500",channel="1",interval="0",duration="1000")
+        AT.CANBusSend(id="0x53A",dlc="8",message="3131313131313131",baudrate="500",channel="1",interval="0",duration="1000")
 
-        # AT.sleep(7200000 * 7)
         pass
 
     def teardown(self):
-        StepDesc(step_desc="Step description1",expect_value="Expect value1")
-        AT.sleep(sleepTime="400")
-        # AT.CanBusStopSendMsg(id="0x111", ch=1)
-        # AT.CanBusStopSendMsg(id="0x638", ch=1)
-        # AT.CanBusStopSendMsg(id="0x376", ch=1)
+
         pass
 
 

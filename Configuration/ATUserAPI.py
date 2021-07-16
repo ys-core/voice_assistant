@@ -16,9 +16,11 @@ from ATScripts.ATCommon.apiutil import StepDesc
 
 
 
+# >>>>>>>>>General functions:  "wakeup VA" ,"return to homepage"   ------------------------------------------------------------------------------
+
 def get_max_time_tolerance():
     """
-        类型:获得最大容忍时长
+        类型:z_获得最大容忍时长
         说明:
             force stop the current case
         参数:
@@ -36,7 +38,7 @@ def get_max_time_tolerance():
 @apiwrapper
 def wake_up_by_clicking_icon():
     """
-        类型:点击方式激活VA
+        类型:z_点击方式激活VA
         说明:
             点击方式激活VA
         参数:
@@ -76,7 +78,7 @@ def wake_up_by_clicking_icon():
 @apiwrapper
 def wake_up_by_voice():
     """
-        类型:语音唤醒
+        类型:z_语音唤醒VA
         说明:
             通过语音唤醒
         参数:
@@ -96,7 +98,7 @@ def wake_up_by_voice():
 @apiwrapper
 def return_to_all_apps_page():
     """
-        类型:用户自定义Demo
+        类型:z_返回All  App页面
         说明:
             返回到主界面 all apps page
         参数:
@@ -111,9 +113,61 @@ def return_to_all_apps_page():
     return True
 
 
+
+
+# 1.3  Map(start)  ------------------------------------------------------------------------------------------------------------------
+
+def openMap():
+    """
+        类型:z_打开地图
+        说明:
+            open map
+        参数:
+            test: 模版参数
+            desc: 描述方法操作功能，更具体的展示在测试报告
+        返回: False
+              True
+    """
+    AT.close_map()
+    AT.sleep(sleepTime="100")
+    AT.RunCommand(command="adb shell am start -n com.baidu.naviauto/.NaviAutoActivity",timeout="100")
+    AT.sleep(sleepTime="15000")
+
+    if str(AT.FindElementBy_id(id="com.baidu.che.codriver:id/content_msg",target="None",timeout="1")) == "True":
+        AT.ClickElementBy_id(id="com.baidu.naviauto:id/second_btn",target="None",timeout="2000")
+        AT.sleep(sleepTime="2000")
+
+    # 如果没有找到“请输入目的地”这个输入框，视为打开百度地图失败，返回False,否则返回True
+    if str(AT.FindElementBy_id(id="com.baidu.che.codriver:id/et_ctrl_search",target="None",timeout="1")) == "True":
+        return True
+    else:
+        return False
+
+
+
+def closeMap():
+    """
+        类型:z_关闭地图
+        说明:
+            close map
+        参数:
+            test: 模版参数
+            desc: 描述方法操作功能，更具体的展示在测试报告
+        返回: False
+              True
+    """
+    r_v = AT.RunCommand(command="adb shell am force-stop com.baidu.naviauto",timeout="100")
+    AT.sleep(sleepTime="200")
+    if len(r_v) == 7:
+        return True
+    else:
+        return False
+
+
+
 def open_map_input_destination_to_start_navigation():
     """
-        类型:进入导航状态
+        类型:z_进入导航状态
         说明:
             进入导航状态
         参数:
@@ -143,7 +197,7 @@ def open_map_input_destination_to_start_navigation():
     status = False
     once = True
 
-    AT.open_map()
+    AT.openMap()
 
 
     while(True):
@@ -165,7 +219,7 @@ def open_map_input_destination_to_start_navigation():
 @apiwrapper
 def keep_map_on_path_planned_page():
     """
-        类型:进入到路径规划页面
+        类型:z_进入到路径规划页面
         说明:
             模版方法
         参数:
@@ -195,7 +249,7 @@ def keep_map_on_path_planned_page():
     status = False
     once = True
 
-    AT.open_map()
+    AT.openMap()
 
 
     while(True):
@@ -216,50 +270,6 @@ def keep_map_on_path_planned_page():
 
 
 
-def close_map():
-    """
-        类型:关闭地图
-        说明:
-            close map
-        参数:
-            test: 模版参数
-            desc: 描述方法操作功能，更具体的展示在测试报告
-        返回: False
-              True
-    """
-    r_v = AT.RunCommand(command="adb shell am force-stop com.baidu.naviauto",timeout="100")
-    AT.sleep(sleepTime="200")
-    if len(r_v) == 7:
-        return True
-    else:
-        return False
-
-
-def open_map():
-    """
-        类型:打开地图
-        说明:
-            open map
-        参数:
-            test: 模版参数
-            desc: 描述方法操作功能，更具体的展示在测试报告
-        返回: False
-              True
-    """
-    AT.close_map()
-    AT.sleep(sleepTime="100")
-    AT.RunCommand(command="adb shell am start -n com.baidu.naviauto/.NaviAutoActivity",timeout="100")
-    AT.sleep(sleepTime="15000")
-
-    if str(AT.FindElementBy_id(id="com.baidu.che.codriver:id/content_msg",target="None",timeout="1")) == "True":
-        AT.ClickElementBy_id(id="com.baidu.naviauto:id/second_btn",target="None",timeout="2000")
-        AT.sleep(sleepTime="2000")
-
-    # 如果没有找到“请输入目的地”这个输入框，视为打开百度地图失败，返回False,否则返回True
-    if str(AT.FindElementBy_id(id="com.baidu.che.codriver:id/et_ctrl_search",target="None",timeout="1")) == "True":
-        return True
-    else:
-        return False
 
 
 
