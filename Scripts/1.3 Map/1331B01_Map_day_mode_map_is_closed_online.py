@@ -22,7 +22,7 @@ class testApp(CATBaseCase):
         # device info :
         # functions :
         # model :
-        # updated : 2021-07-16 08:38:11
+        # updated : 2021-07-16 16:48:52
         pass
 
 
@@ -37,6 +37,7 @@ class testApp(CATBaseCase):
 
         StepDesc(step_desc="确认当前地图处于关闭状态",expect_value="地图为关闭状态")
         AT.closeMap()
+        AT.wake_up_by_clicking_icon()
         pass
 
 

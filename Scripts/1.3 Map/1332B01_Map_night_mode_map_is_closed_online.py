@@ -8,9 +8,10 @@
 from ATScripts.ATSrc.ATImpl.ATAcutor.BaseTestCase import CATBaseCase
 from ATScripts import ATAPI as AT
 from ATScripts.ATCommon.apiutil import StepDesc
+import time
 
 '''
-  precondition: 地图关闭，后台杀死中，VA：黑夜模式，TTS，请先打开地图
+  precondition: 地图关闭，后台杀死中，VA：黑夜模式 | 进入黑夜模式，TTS，请先打开地图
 '''
 class testApp(CATBaseCase):
 
@@ -21,24 +22,24 @@ class testApp(CATBaseCase):
         # device info :
         # functions :
         # model :
-        # updated : 2021-07-14 14:03:51
+        # updated : 2021-07-16 17:37:45
         pass
 
 
 
     def setup(self):                # precondtion
 
-        global user_command,TTS_feedback
-        user_command = "结束导航"
-        TTS_feedback = "导航结束"
+        global user_command,user_command1,TTS_feedback,startTime
+        startTime = time.time()
+        user_command = "黑夜模式"
+        user_command1 = "进入黑夜模式"
+        TTS_feedback = "请先打开地图"
 
-        StepDesc(step_desc="确认当前为导航过程中",expect_value="打开导航中")
-        if AT.open_map_input_destination_to_start_navigation():
-            AT.wake_up_by_clicking_icon()
-        else:
-            AT.open_map_input_destination_to_start_navigation()
-
+        StepDesc(step_desc="确认当前地图处于关闭状态",expect_value="地图为关闭状态")
+        AT.closeMap()
+        AT.wake_up_by_clicking_icon()
         pass
+
 
 
 
@@ -49,7 +50,7 @@ class testApp(CATBaseCase):
         step1 = False
         step2 = False
 
-        AT.VRSpeak(string="",saveFile="Map_end_navi.wav",volume="100",ensure="False")
+        AT.VRSpeak(string="",saveFile="Sources\\Medias\\Map\\Map_night_mode.wav",volume="100",ensure="False")
 
         #1.监听用户的输入，并以文本显示在single_content空间内,判断是否识别用户指令正确，正确即跳出while循环,不正确直接报错
         StepDesc(step_desc="1.判断识别结果",expect_value="开始导航")

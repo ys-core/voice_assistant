@@ -16,7 +16,7 @@ from ATScripts.ATCommon.apiutil import StepDesc
 
 
 
-# >>>>>>>>>General functions:  "wakeup VA" ,"return to homepage"   ------------------------------------------------------------------------------
+# >>>>>>>>> General functions:  "wakeup VA" ,"return to homepage"   ------------------------------------------------------------------------------
 
 def get_max_time_tolerance():
     """
@@ -112,10 +112,11 @@ def return_to_all_apps_page():
 
     return True
 
+# <<<<<<<<<< General functions:  "wakeup VA" ,"return to homepage"   ------------------------------------------------------------------------------
 
 
 
-# 1.3  Map(start)  ------------------------------------------------------------------------------------------------------------------
+# >>>>>>>>>>>> 1.3  Map(start)  ------------------------------------------------------------------------------------------------------------------
 
 def openMap():
     """
@@ -158,7 +159,7 @@ def closeMap():
     """
     r_v = AT.RunCommand(command="adb shell am force-stop com.baidu.naviauto",timeout="100")
     AT.sleep(sleepTime="200")
-    if len(r_v) == 7:
+    if len(r_v) == 7:                  # r_v = "Success"
         return True
     else:
         return False
@@ -269,6 +270,7 @@ def keep_map_on_path_planned_page():
 
 
 
+# <<<<<<<<<< 1.3  Map(start)  ------------------------------------------------------------------------------------------------------------------
 
 
 
